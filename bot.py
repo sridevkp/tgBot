@@ -3,20 +3,20 @@ from telegram import Update
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
 
 
-API_KEY = os.get_env('API_KEY')
-USERNAME = 'guudMorning_bot'
+TOKEN = os.getenv('TOKEN')
+USERNAME = '@guudMorning_bot'
 
 
 #commands
 async def start_command( update, context ):
-    update.message.reply_text("Hello")
+    await update.message.reply_text("Hello")
 
 async def help_command( update, context ):
-    update.message.reply_text("Help is here")
+    await update.message.reply_text("Help is here")
 
 
 async def custom_command( update, context ):
-    update.message.reply_text("custom?")
+    await update.message.reply_text("custom?")
 
 
 
@@ -25,7 +25,7 @@ async def handle_message( update, context ):
     msg_type = update.message.chat.type #group/private
     text = update.message.text
     response = ''
-
+    
     if msg_type == "group":
         if USERNAME in text:
             response = "Responding in group"
@@ -35,6 +35,7 @@ async def handle_message( update, context ):
         response = "Respondig in private"
 
     await update.message.reply_text( response )
+    await update.message.reply_text( text )
 
 
 async def error( update, context ):
@@ -43,10 +44,16 @@ async def error( update, context ):
 
 
 if __name__ == '__main__' :
-    app = Application.builder().token(API_KEY).build()
+    app = Application.builder().token("6774887793:AAEVdb6lBt-fXd5aPYviyt_O7rv_roqEcf8").build()
     #add command handlers
-    app.add_handler( CommandHandler( 'start' , start_command ))
-    app.add_handler( CommandHandler( 'help'  , start_command ))
-    app.add_handler( CommandHandler( 'custom', start_command ))
+    app.add_handler( CommandHandler( 'start' , start_command  ))
+    app.add_handler( CommandHandler( 'help'  , help_command   ))
+    app.add_handler( CommandHandler( 'custom', custom_command ))
     #add message handler
     app.add_handler( MessageHandler( filters.TEXT, handle_message ))
+    #add errr handling 
+    app.add_error_handler(error)
+
+    #poll app
+    print("polling bot")
+    app.run_polling( poll_interval = 3 )
