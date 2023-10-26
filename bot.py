@@ -2,8 +2,10 @@ import os
 from telegram import Update
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
 
+
 API_KEY = os.get_env('API_KEY')
 USERNAME = 'guudMorning_bot'
+
 
 #commands
 async def start_command( update, context ):
@@ -16,9 +18,9 @@ async def help_command( update, context ):
 async def custom_command( update, context ):
     update.message.reply_text("custom?")
 
+
+
 #respond
-
-
 async def handle_message( update, context ):
     msg_type = update.message.chat.type #group/private
     text = update.message.text
@@ -27,6 +29,8 @@ async def handle_message( update, context ):
     if msg_type == "group":
         if USERNAME in text:
             response = "Responding in group"
+        else:
+            return
     else:
         response = "Respondig in private"
 
