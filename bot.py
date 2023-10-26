@@ -22,12 +22,20 @@ async def custom_command( update, context ):
 async def handle_message( update, context ):
     msg_type = update.message.chat.type #group/private
     text = update.message.text
+    response = ''
 
     if msg_type == "group":
-        return
+        if USERNAME in text:
+            response = "Responding in group"
+    else:
+        response = "Respondig in private"
+
+    await update.message.reply_text( response )
+
 
 async def error( update, context ):
     print( update, context)
+
 
 
 if __name__ == '__main__' :
