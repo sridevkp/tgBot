@@ -46,7 +46,7 @@ async def error( update, context ):
 
 
 if __name__ == '__main__' :
-    app = Application.builder().token(TOKEN).build()
+    app = Application.builder().token("6774887793:AAEVdb6lBt-fXd5aPYviyt_O7rv_roqEcf8").build()
     #add command handlers
     app.add_handler( CommandHandler( 'start' , start_command  ))
     app.add_handler( CommandHandler( 'help'  , help_command   ))
