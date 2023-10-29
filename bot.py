@@ -4,7 +4,7 @@ import json
 import subprocess #runs command in shell/terminal
 import speech_recognition as sr
 from io import BytesIO
-from pydub import AudioSegment
+# from pydub import AudioSegment
 from dotenv import load_dotenv
 from telegram import Update
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
