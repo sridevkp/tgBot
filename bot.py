@@ -47,9 +47,10 @@ async def handle_message( update, context ):
 
 #audio
 async def handle_audio_message( update, context ):
+    await update.message.reply_text( "transcribing your audio..." )
     file = await update.message.voice.get_file()
     audio = get_file( file.file_path )
-    transcript = "what?"
+    transcript = "Sorry what?"
 
     with open("audio.ogg","wb") as file:
         file.write(audio)
@@ -97,7 +98,7 @@ if __name__ == '__main__' :
     # app.add_handler( MessageHandler( filters.AUDIO , handle_audio_message ))  #audio
 
     #add errr handling 
-    # app.add_error_handler(error)
+    app.add_error_handler(error)
 
     #poll app
     print("polling bot")
