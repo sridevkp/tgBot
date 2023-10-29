@@ -28,8 +28,8 @@ async def start_command( update, context ):
 
     response = requests.get(URL, headers=headers)
 
-    await update.message.reply_text("Hello")
-    await update.message.reply_text( response.json().data )
+    await update.message.reply_text("Hi")
+    await update.message.reply_text('"'+response.json()["data"]+'"')
 
 async def help_command( update, context ):
     await update.message.reply_text("Help is here")
