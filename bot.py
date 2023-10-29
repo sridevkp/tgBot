@@ -10,6 +10,9 @@ from telegram import Update
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
 load_dotenv()
 
+
+
+
 TOKEN = os.getenv('TOKEN')
 USERNAME = '@guudMorning_bot'
 
@@ -17,7 +20,16 @@ recognizer = sr.Recognizer()
 
 #commands
 async def start_command( update, context ):
+    URL = "https://thought-of-the-day.p.rapidapi.com/thought"
+    headers = {
+	    "X-RapidAPI-Key": "7dac8a4a85msh6dc9dbe6114d8bep1e84a2jsn96b16dac4699",
+	    "X-RapidAPI-Host": "thought-of-the-day.p.rapidapi.com"
+    }
+
+    response = requests.get(URL, headers=headers)
+
     await update.message.reply_text("Hello")
+    await update.message.reply_text( response.json().data )
 
 async def help_command( update, context ):
     await update.message.reply_text("Help is here")
