@@ -1,16 +1,19 @@
 import os
 import requests
 import json
+import subprocess #runs command in shell/terminal
+import speech_recognition as sr
+from io import BytesIO
+from pydub import AudioSegment
 from dotenv import load_dotenv
 from telegram import Update
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
-
 load_dotenv()
 
 TOKEN = os.getenv('TOKEN')
 USERNAME = '@guudMorning_bot'
 
-test_audio = open("audio.mp3",'rb')
+recognizer = sr.Recognizer()
 
 #commands
 async def start_command( update, context ):
@@ -44,15 +47,34 @@ async def handle_message( update, context ):
 
 #audio
 async def handle_audio_message( update, context ):
-    audio = get_file( update.message.voice.get_file().file_path )
-    await update.message.reply_audio( audio )
+    file = await update.message.voice.get_file()
+    audio = get_file( file.file_path )
+    transcript = "what?"
+
+    with open("audio.ogg","wb") as file:
+        file.write(audio)
+
+    subprocess.run(['ffmpeg', '-i', 'audio.ogg', 'audio.wav', '-y']) #convert .ogg file to .wav
+
+    audio_file = sr.AudioFile('audio.wav')
+
+    with audio_file as source:
+        try:
+            audio = recognizer.record(source)  # listen to file
+            transcript = recognizer.recognize_google(audio, language="english") # and write the heard text to a text variable
+        except:
+            print("somethin went wrnog")
+
+
+    # await update.message.reply_audio( audio )
+    await update.message.reply_text( transcript )
 
 
 
 #error handling
-async def error( update, context ):
+async def error( update, context):
     print("an error occured")
-    print( update, context)
+    print( update, context )
 
 
 def get_file(url, json=False):
@@ -72,10 +94,10 @@ if __name__ == '__main__' :
     #add message handler
     app.add_handler( MessageHandler( filters.TEXT  , handle_message ))        #text
     app.add_handler( MessageHandler( filters.VOICE , handle_audio_message ))  #voice
-    app.add_handler( MessageHandler( filters.AUDIO , handle_audio_message ))  #audio
+    # app.add_handler( MessageHandler( filters.AUDIO , handle_audio_message ))  #audio
 
     #add errr handling 
-    app.add_error_handler(error)
+    # app.add_error_handler(error)
 
     #poll app
     print("polling bot")
